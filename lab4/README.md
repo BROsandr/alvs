@@ -81,3 +81,88 @@
         ![Alt text](image-7.png)
 
 3.  ## Веб сервер на основе Apache
+
+    1.  > Установите Apache на _server (или убедитесь, что он установлен)
+
+        Установлен, тк есть папка с конфигами в `/etc/`
+    2.  > Выключите режим AstraMode в файле /etc/apache2/apache2.conf
+
+        ```bash
+        sudo nano /etc/apache2/apache2.conf
+        ```
+
+    3.  > Настройте конфигурационный файл следующим образом:
+        >
+        > Имя сервера: «Ваши инициалы».localnet.miet.stu,
+        >
+        > адрес администратора: «Ваши инициалы»@miet.stu,
+        >
+        > директория для расположения документов /var/www/«Ваши инициалы»
+
+        Имя сервера: aak.localnet.miet.stu,
+
+        адрес администратора: aak@miet.stu,
+
+        директория для расположения документов /var/www/aak
+
+        ```bash
+        sudo cp 000-default.conf aak.localnet.miet.stu.conf
+        ```
+
+        ![Alt text](image-9.png)
+
+    4.  > Создайте каталог /var/www/«Ваши инициалы» для размещения веб страниц.
+
+        ```bash
+        sudo mkdir /var/www/aak
+        ```
+
+    5.  > Разместите в созданном каталоге веб страницу со следующим содержимым:
+
+        ```html
+        <html>
+          <head>
+            <title> Welcome to MIET</title>
+          </head>
+          <body>
+            <h1>Welcome to MPSU</h1>
+            <p>Hello! I love MPSU!</p>
+          </body>
+        </html>
+        ```
+
+    6.  > Активируйте сайт и перечитайте конфигурацию веб-сервера
+
+        ```bash
+        sudo /sbin/a2ensite aak.localnet.miet.stu
+        sudo systemctl reload apache2
+        ```
+
+    7.  > Проверьте созданную страницу в браузере.
+
+        ![Alt text](image-10.png)
+
+    8.  > Добавьте созданную страницу в список записей DNS и откройте её с машины клиента,
+        > используя доменное имя
+
+        Добавим запись в `/etc/bind/named.local.conf`:
+
+        ![Alt text](image-12.png)
+
+        Добавим запись в `/etc/bind/db.localnet.miet.stu`:
+
+        ![Alt text](image-13.png)
+
+        ```bash
+        sudo /etc/init.d/bind9 restart
+        ```
+
+        Добавим в *squid* возможность *серверу* отвечать на запросы:
+
+        ![Alt text](image-11.png)
+
+        ```bash
+        sudo systemctl reload squid
+        ```
+
+        Теперь сайт должен находиться на *клиенте*.
